@@ -1,0 +1,213 @@
+{% extends 'gestion/base.html' %}
+{% load static %}
+
+{% block content %}
+<header class="sg-topbar">
+        <div class="sg-topbar-left">
+        <!-- Bouton burger à gauche -->
+        <button id="sidebarToggle" class="sidebar-toggle-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Titre optionnel (peut être masqué sur mobile) -->
+        <h1 class="app-name d-none d-sm-inline">SG Sekurit</h1>
+    </div>
+    
+        <!-- Utilisateur -->
+        <div class="sg-user-menu dropdown">
+            <button class="btn user-btn" type="button" data-bs-toggle="dropdown">
+                <i class="fas fa-user-circle me-2"></i>
+                {{ user.get_full_name|default:user.username }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{% url 'profile_view' %}"><i class="fas fa-user me-2"></i>Profil</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Déconnexion</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<div class="dashboard-container">
+    <!-- Header avec boutons d'action -->
+    <div class="dashboard-header">
+        <h1><i class="fas fa-tachometer-alt"></i> Tableau de Bord Intelligent</h1>
+        <div class="header-actions">
+            <a href="{% url 'analytics' %}" class="btn btn-analytics">
+                <i class="fas fa-chart-pie"></i> Voir Analytics
+            </a>
+            {% if is_worker or user.is_superuser %}
+            <a href="{% url 'verifier_logo' %}" class="btn btn-primary">
+                <i class="fas fa-camera"></i> Nouvelle Vérification
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Cartes Statistiques Animées -->
+    <div class="stats-grid">
+        <!-- Carte 1 -->
+        <div class="stat-card card-1">
+            <div class="card-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="card-content">
+                <h3>{{ users_count }}</h3>
+                <p>Utilisateurs Actifs</p>
+                <div class="progress-bar">
+  <div class="progress" data-width="{{ active_users_percent|floatformat:'1'|cut:',' }}"></div>
+</div>
+
+                <span>{{ active_users_count }} actifs ({{ active_users_percent|floatformat:1 }}%)</span>
+            </div>
+            <div class="wave"></div>
+        </div>
+
+        <!-- Carte 2 -->
+        <div class="stat-card card-2">
+            <div class="card-icon">
+                <i class="fas fa-check-double"></i>
+            </div>
+            <div class="card-content">
+                <h3>{{ total_verifications }}</h3>
+                <p>Vérifications Total</p>
+                <div class="progress-bar">
+  <div class="progress" data-width="{{ success_rate|floatformat:'1'|cut:',' }}"></div>
+</div>
+
+                <span>{{ success_count }} réussites ({{ success_rate|floatformat:1 }}%)</span>
+            </div>
+            <div class="wave"></div>
+        </div>
+
+        <!-- Carte 3 -->
+        <div class="stat-card card-3">
+            <div class="card-icon">
+                <i class="fas fa-car"></i>
+            </div>
+            <div class="card-content">
+                <h3>{{ parebrises_count }}</h3>
+                <p>Modèles Enregistrés</p>
+              <div class="progress-bar">
+  <div class="progress" data-width="{{ verified_models_percent|floatformat:'1'|cut:',' }}"></div>
+</div>
+
+                <span>{{ verified_models }} vérifiés ({{ verified_models_percent|floatformat:1 }}%)</span>
+            </div>
+            <div class="wave"></div>
+        </div>
+    </div>
+
+    <!-- Graphiques Principaux -->
+    <div class="charts-container">
+        <!-- Graphique 1 -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3><i class="fas fa-chart-line"></i> Activité des Vérifications</h3>
+                <select class="chart-filter" id="periodFilter">
+                    <option value="7days" {% if period == '7days' %}selected{% endif %}>7 Jours</option>
+                    <option value="30days" {% if period == '30days' %}selected{% endif %}>30 Jours</option>
+                </select>
+            </div>
+            <canvas id="verificationChart" 
+                    data-dates='{{ verification_dates|safe }}'
+                    data-values='{{ verification_data|safe }}'></canvas>
+        </div>
+
+        <!-- Graphique 2 -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3><i class="fas fa-chart-pie"></i> Répartition des Erreurs</h3>
+            </div>
+            <canvas id="errorDistributionChart"
+                    data-logo-errors="{{ logo_errors }}"
+                    data-barcode-errors="{{ barcode_errors }}"
+                    data-other-errors="{{ other_errors }}"></canvas>
+           <div class="chart-legend">
+    <span><i class="fas fa-square logos-incorrects"></i> Logos incorrects</span>
+    <span><i class="fas fa-square codes-barres-invalides"></i> Codes-barres invalides</span>
+    <span><i class="fas fa-square autres-erreurs"></i> Autres erreurs</span>
+</div>
+
+        </div>
+    </div>
+
+    <!-- Dernières Vérifications -->
+    <div class="recent-activity">
+        <div class="section-header">
+            <h3><i class="fas fa-history"></i> Dernières Vérifications</h3>
+        </div>
+        
+        <div class="verification-grid">
+            {% for log in recent_verifications %}
+            <div class="verification-card {% if not log.success %}invalid{% endif %}">
+                <div class="image-comparison">
+                    <div class="verification-image">
+                        <h4>Image vérifiée</h4>
+                        <div class="image-container">
+                            {% if log.image %}
+                                <img src="{{ log.image.url }}" alt="Logo vérifié">
+                            {% else %}
+                                <div class="no-image">
+                                    <i class="fas fa-image"></i>
+                                    <p>Image non disponible</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="reference-image">
+                        <h4>Référence</h4>
+                        <div class="image-container">
+                            {% if log.parebrise.logo_reference %}
+                                <img src="{{ log.parebrise.logo_reference.url }}" alt="Logo de référence">
+                            {% else %}
+                                <div class="no-image">
+                                    <i class="fas fa-image"></i>
+                                    <p>Référence non disponible</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="verification-details">
+                    <div class="verification-meta">
+                        <span class="timestamp">
+                            <i class="far fa-clock"></i> {{ log.timestamp|date:"d/m/Y H:i" }}
+                        </span>
+                        <span class="badge {% if log.success %}success{% else %}danger{% endif %}">
+                            {% if log.success %}Valide{% else %}Invalide{% endif %}
+                        </span>
+                    </div>
+                    
+                    <div class="verification-info">
+                        <h4><i class="fas fa-car"></i> {{ log.parebrise.marque }} {{ log.parebrise.modele }}</h4>
+                        <p>Vérifié par {{ log.user.username }}</p>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'bootstrap/css/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'bootstrap/css/responsive.css' %}">
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'bootstrap/js/responsive.js' %}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'bootstrap/js/dashboard.js' %}"></script>
+<script src="{% static 'bootstrap/js/dashboard-init.js' %}"></script>
+
+{% endblock %}

@@ -1,0 +1,175 @@
+{% extends 'gestion/base.html' %}
+
+{% load static %}
+{% block title %}Saint-Gobain Sekurit – Vérification Logo{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
+<link rel="stylesheet" href="{% static 'bootstrap/css/logo_verification.css' %}">
+<link rel="stylesheet" href="{% static 'bootstrap/css/responsive.css' %}">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+{% endblock %}
+{% block content %}
+<header class="sg-topbar">
+        <div class="sg-topbar-left">
+        <!-- Bouton burger à gauche -->
+        <button id="sidebarToggle" class="sidebar-toggle-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Titre optionnel (peut être masqué sur mobile) -->
+        <h1 class="app-name d-none d-sm-inline">SG Sekurit</h1>
+    </div>
+    
+        <!-- Utilisateur -->
+        <div class="sg-user-menu dropdown">
+            <button class="btn user-btn" type="button" data-bs-toggle="dropdown">
+                <i class="fas fa-user-circle me-2"></i>
+                {{ user.get_full_name|default:user.username }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{% url 'profile_view' %}"><i class="fas fa-user me-2"></i>Profil</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Déconnexion</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+  <header class="sg-header">
+  <div id="headerCarousel" class="carousel slide header-carousel" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#headerCarousel" data-bs-slide-to="0" class="active"></button>
+      <button type="button" data-bs-target="#headerCarousel" data-bs-slide-to="1"></button>
+      <button type="button" data-bs-target="#headerCarousel" data-bs-slide-to="2"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{% static 'registration/istockphoto-147461093-612x612 (1).webp' %}" class="d-block w-100" alt="Produit Saint-Gobain">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'registration/1 (5).avif' %}" class="d-block w-100" alt="Usine Saint-Gobain">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'registration/1 (4).avif' %}" class="d-block w-100" alt="Technologie Saint-Gobain">
+      </div>
+    </div>
+  </div>
+  
+  <div class="header-content">
+    <h1>Saint-Gobain Sekurit</h1>
+    <p class="mb-0">Vérification du logo imprimé sur pare-brise</p>
+  </div>
+</header>
+
+  <div class="container sg-container p-4">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="code_sap" class="form-label">
+          <i class="fas fa-barcode me-2"></i>Code SAP
+        </label>
+        <input type="text" class="form-control" id="code_sap" name="code_sap" placeholder="Ex : 1234567" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">
+          <i class="fas fa-image me-2"></i>Logo imprimé
+        </label>
+
+        <div class="mb-3 text-center">
+          <button type="button" id="start-camera" class="btn btn-outline-primary mb-2">
+            <i class="fas fa-camera"></i> Activer la caméra
+          </button>
+
+          <div id="camera-container" class="d-none">
+            <video id="video" class="video-preview" autoplay playsinline></video>
+
+            <canvas id="snapshot" class="d-none"></canvas>
+            <button type="button" id="take-photo" class="btn btn-success mt-2">
+              <i class="fas fa-camera-retro"></i> Prendre la photo
+            </button>
+          </div>
+        </div>
+
+        <div class="file-upload-wrapper">
+          <label for="logo_uploaded" class="file-upload-label">
+            <div class="file-upload-text">
+              <div class="file-upload-icon">
+                <i class="fas fa-cloud-upload-alt"></i>
+              </div>
+              <h5>Cliquez pour sélectionner une image</h5>
+              <p class="text-muted mb-0">Formats acceptés: JPG, PNG (max. 5MB)</p>
+            </div>
+            <input class="file-upload-input" type="file" id="logo_uploaded" name="logo_uploaded" accept="image/*" required>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">
+        <i class="fas fa-search me-2"></i>Vérifier le logo
+      </button>
+    </form>
+
+    {% if message %}
+    <div class="result-card {% if message_tag == 'success' %}result-success{% else %}result-error{% endif %}">
+      <div class="d-flex align-items-center">
+        <div class="result-icon">
+          {% if message_tag == 'success' %}
+            <i class="fas fa-check-circle text-success"></i>
+          {% else %}
+            <i class="fas fa-exclamation-circle text-danger"></i>
+          {% endif %}
+        </div>
+        <div>
+          <h5 class="mb-1">
+            {% if message_tag == 'success' %}
+              Validation réussie
+            {% else %}
+              Problème détecté
+            {% endif %}
+          </h5>
+          <p class="mb-0">{{ message|safe }}</p>
+
+          {% if barcode_message %}
+            <p class="mb-0 mt-2"><strong>Code-barres :</strong><br> {{ barcode_message|safe }}</p>
+          {% endif %}
+
+          {% if match_percentage %}
+          <div class="match-indicator">
+            <span>Taux de correspondance :</span>
+            <span class="match-value {% if message_tag == 'success' %}match-success{% else %}match-error{% endif %}">
+              {{ match_percentage }}%
+            </span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if reference_image and uploaded_image %}
+      <div class="comparison-container mt-3">
+        <div class="image-comparison">
+          <h6>Logo attendu</h6>
+          <img src="{{ reference_image }}" alt="Logo de référence" />
+        </div>
+        <div class="image-comparison">
+          <h6>Logo soumis</h6>
+          <img src="{{ uploaded_image }}" alt="Logo soumis" />
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  <script src="{% static 'bootstrap/js/logo_verification.js' %}"></script>
+  <script src="{% static 'bootstrap/js/responsive.js' %}"></script>
+
+
+
+
+</body>
+</html>
+{%endblock%}

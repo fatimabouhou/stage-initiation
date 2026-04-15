@@ -1,0 +1,208 @@
+:root {
+  --sg-blue: #005b9f;
+  --sg-blue-light: rgba(0, 91, 159, 0.1);
+  --sg-orange: #e95213;
+  --sg-orange-light: rgba(233, 82, 19, 0.1);
+  --sg-light: hsl(210, 17%, 98%);
+  --sg-white: #ffffff;
+  --sg-gray: #e9ecef;
+  --sg-dark: #212529;
+}
+
+body {
+  background: linear-gradient(135deg, var(--sg-light) 0%, var(--sg-white) 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 480px;
+  padding: 2rem;
+}
+
+.auth-card {
+  background: var(--sg-white);
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 12px 24px rgba(0, 91, 159, 0.15);
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, var(--sg-blue) 0%, var(--sg-orange) 100%);
+}
+
+.auth-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 32px rgba(0, 91, 159, 0.2);
+}
+
+.auth-logo {
+  height: 80px;
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.auth-logo:hover {
+  transform: scale(1.05);
+}
+
+.auth-title {
+  color: var(--sg-blue);
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+}
+
+.auth-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: var(--sg-orange);
+  border-radius: 3px;
+}
+
+.auth-form {
+  margin-top: 1.5rem;
+}
+
+.form-label {
+  color: var(--sg-dark);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.form-control {
+  padding: 0.85rem 1.25rem;
+  border-radius: 10px;
+  border: 2px solid var(--sg-gray);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  font-size: 0.95rem;
+}
+
+.form-control:focus {
+  border-color: var(--sg-blue);
+  box-shadow: 0 0 0 0.25rem var(--sg-blue-light);
+  outline: none;
+}
+
+.btn-primary {
+  background-color: var(--sg-orange);
+  border-color: var(--sg-orange);
+  font-weight: 600;
+  padding: 0.85rem;
+  border-radius: 10px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 6px rgba(233, 82, 19, 0.2);
+}
+
+.btn-primary:hover {
+  background-color: #d04a11;
+  border-color: #d04a11;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(233, 82, 19, 0.3);
+}
+
+.btn-outline-secondary {
+  border: 2px solid var(--sg-blue);
+  color: var(--sg-blue);
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  background-color: transparent;
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--sg-blue);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 91, 159, 0.2);
+}
+
+.auth-footer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.auth-footer p {
+  color: #6c757d;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.alert {
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  border: none;
+  font-weight: 500;
+}
+
+.alert-danger {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  border-left: 4px solid #dc3545;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-card {
+  animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Effet de vague décoratif */
+.wave-decoration {
+  position: absolute;
+  bottom: -50px;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23005b9f' fill-opacity='0.05' d='M44.4,-47.1C56.5,-34.5,64.6,-17.3,63.9,-0.6C63.1,16.1,53.5,32.2,41.4,43.9C29.2,55.6,14.6,62.9,-2.6,65.5C-19.8,68.1,-39.6,66,-54.3,54.3C-69.1,42.6,-78.9,21.3,-77.4,1.3C-75.9,-18.7,-63.1,-37.4,-48.3,-50C-33.5,-62.6,-16.7,-69.2,0.7,-69.9C18.1,-70.6,36.2,-65.4,44.4,-47.1Z' transform='rotate(15)'/%3E%3C/svg%3E");
+  background-size: contain;
+  z-index: -1;
+  opacity: 0.6;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .auth-container {
+    padding: 1.5rem;
+  }
+  
+  .auth-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .auth-title {
+    font-size: 1.6rem;
+  }
+}

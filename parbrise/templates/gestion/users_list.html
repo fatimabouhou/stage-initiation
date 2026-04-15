@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>Liste des utilisateurs</h1>
+<table class="user-table">
+    <thead>
+        <tr><th>ID</th><th>Username</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr data-user-id="{{ user.id }}">
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>
+                <button class="delete-btn" data-user-id="{{ user.id }}">Supprimer</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'bootstrap/js/delete_user.js' %}"></script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'bootstrap/css/users_list.css' %}">
+{% endblock %}

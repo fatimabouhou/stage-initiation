@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Modifier le rôle de {{ user.username }}</h2>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <label for="new_role">Rôle :</label>
+    <select name="new_role" id="new_role" required>
+      {% for value, label in roles %}
+        <option value="{{ value }}" {% if value == user.role %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+
+    <br><br>
+    <button type="submit">Mettre à jour</button>
+    <a href="{% url 'manage_roles' %}">Annuler</a>
+  </form>
+{% endblock %}

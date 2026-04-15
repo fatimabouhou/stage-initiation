@@ -1,0 +1,131 @@
+{% extends 'gestion/base.html' %}
+
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'bootstrap/css/parb.css' %}">
+<link rel="stylesheet" href="{% static 'bootstrap/css/responsive.css' %}">
+<link rel="stylesheet" href="{% static 'bootstrap/css/responsive.css' %}">
+
+{% endblock %}
+{% block content %}
+<header class="sg-topbar">
+        <div class="sg-topbar-left">
+        <!-- Bouton burger à gauche -->
+        <button id="sidebarToggle" class="sidebar-toggle-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Titre optionnel (peut être masqué sur mobile) -->
+        <h1 class="app-name d-none d-sm-inline">SG Sekurit</h1>
+    </div>
+    
+        <!-- Utilisateur -->
+        <div class="sg-user-menu dropdown">
+            <button class="btn user-btn" type="button" data-bs-toggle="dropdown">
+                <i class="fas fa-user-circle me-2"></i>
+                {{ user.get_full_name|default:user.username }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{% url 'profile_view' %}"><i class="fas fa-user me-2"></i>Profil</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Déconnexion</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Gestion des Pare-Brise</h1>
+        </header>
+
+        <main>
+            <section class="parebrise-list">
+                <div class="section-header">
+                    <h2>Liste des Pare-Brise</h2>
+                    <button id="openModalBtn" class="btn-add">+ Ajouter</button>
+                </div>
+                
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Code SAP</th>
+                                <th>Version</th>
+                                <th>Logo</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pb in parebrises %}
+                            <tr>
+                                <td>{{ pb.code_sap }}</td>
+                                <td>{{ pb.version }}</td>
+                                <td>
+                                    {% if pb.logo_reference %}
+                                        <img src="{{ pb.logo_reference.url }}" alt="Logo {{ pb.code_sap }}" />
+                                    {% endif %}
+                                </td>
+                                <td class="actions">
+                                    <button class="btn-edit" data-id="{{ pb.id }}">Modifier</button>
+                                    <button class="btn-delete" data-id="{{ pb.id }}">Supprimer</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal pour ajout/modification -->
+    <div id="parebriseModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle">Ajouter un Pare-Brise</h2>
+            <form id="parebriseForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" id="parebriseId" name="parebrise_id" value="">
+                <div class="form-group">
+                    <label for="code_sap">Code SAP</label>
+                    <input type="text" id="code_sap" name="code_sap" required>
+                </div>
+                <div class="form-group">
+                    <label for="version">Version</label>
+                    <input type="text" id="version" name="version" required>
+                </div>
+                <div class="form-group">
+                    <label for="logo_reference">Logo</label>
+                    <input type="file" id="logo_reference" name="logo_reference">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">Enregistrer</button>
+                    <button type="button" class="btn-cancel">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content confirm">
+            <p>Êtes-vous sûr de vouloir supprimer ce pare-brise ?</p>
+            <div class="confirm-actions">
+                <button id="confirmDelete" class="btn-confirm">Oui</button>
+                <button id="cancelDelete" class="btn-cancel">Non</button>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+{%endblock%}
+{% block extra_js%}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'bootstrap/js/manage_parebr.js' %}"></script>
+    <script src="{% static 'bootstrap/js/responsive.js' %}"></script>
+
+{%endblock%}

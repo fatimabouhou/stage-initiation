@@ -1,0 +1,50 @@
+<header class="sg-topbar">
+        <div class="sg-topbar-left">
+        <!-- Bouton burger à gauche -->
+        <button id="sidebarToggle" class="sidebar-toggle-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Titre optionnel (peut être masqué sur mobile) -->
+        <h1 class="app-name d-none d-sm-inline">SG Sekurit</h1>
+    </div>
+    <div class="sg-topbar-right d-flex align-items-center">
+        <!-- Notification -->
+        <div class="notif-icon dropdown me-3">
+            <i class="fas fa-bell fa-lg" data-bs-toggle="dropdown"></i>
+            <span id="notif-badge" class="notif-badge {% if notif_count > 0 %}has-notifications{% endif %}">
+                {{ notif_count }}
+            </span>
+            <ul id="notif-dropdown" class="dropdown-menu dropdown-menu-end">
+  <!-- Boucle JS ou Django -->
+  {% for notif in notifications %}
+  <li>
+    <a href="{{ notif.url }}" class="dropdown-item {% if not notif.is_read %}fw-bold{% endif %}">
+      <i class="fas {{ notif.icon_class }} me-2"></i>
+      <strong>{{ notif.actor }}</strong> a {{ notif.action }} 
+      {% if notif.target %} <em>{{ notif.target }}</em>{% endif %}
+      <br>
+      <small class="text-muted">{{ notif.timestamp }}</small>
+    </a>
+  </li>
+  {% empty %}
+  <li><span class="dropdown-item small">Aucune notification</span></li>
+  {% endfor %}
+</ul>
+
+        </div>
+
+        <!-- Utilisateur -->
+        <div class="sg-user-menu dropdown">
+            <button class="btn user-btn" type="button" data-bs-toggle="dropdown">
+                <i class="fas fa-user-circle me-2"></i>
+                {{ user.get_full_name|default:user.username }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{% url 'profile_view' %}"><i class="fas fa-user me-2"></i>Profil</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Déconnexion</a></li>
+            </ul>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,66 @@
+{% extends 'registration/base_auth.html' %}
+{% load static %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'bootstrap/css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+  <h2 class="auth-title">Connexion</h2>
+</div>
+
+{% if messages %}
+  <div class="alert-container">
+    {% for message in messages %}
+      <div class="alert alert-danger alert-dismissible fade show">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<form method="post" class="auth-form" id="login-form" novalidate>
+  {% csrf_token %}
+  
+  <div class="mb-3">
+    <label for="id_gsid" class="form-label">GSID (7 chiffres)</label>
+    <input
+      type="text"
+      name="gsid"
+      class="form-control"
+      id="id_gsid"
+      maxlength="7"
+      minlength="7"
+      inputmode="numeric"
+      autocomplete="username"
+      autofocus
+      placeholder="Ex : 1234567"
+      required
+    >
+  </div>
+  
+  <div class="mb-3">
+    <label for="id_password" class="form-label">Mot de passe</label>
+    <input
+      type="password"
+      name="password"
+      class="form-control"
+      id="id_password"
+      required
+      autocomplete="current-password"
+    >
+  </div>
+  
+  <button type="submit" class="btn btn-primary w-100 mt-2">Se connecter</button>
+  
+ 
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'bootstrap/js/login.js' %}"></script>
+{% endblock %}

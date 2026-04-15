@@ -1,0 +1,60 @@
+/* Dans votre fichier CSS */
+.notification-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  transition: all 0.3s ease;
+}
+
+.notification-item.unread {
+  background-color: #f8f9fa;
+  font-weight: 500;
+}
+
+.notification-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.notification-icon {
+  margin-right: 10px;
+  color: #6c757d;
+}
+
+.notification-title {
+  flex-grow: 1;
+}
+
+.btn-toggle-details {
+  background: none;
+  border: none;
+  color: #6c757d;
+  transition: transform 0.3s ease;
+}
+
+.notification-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding-left: 30px; /* Pour aligner avec l'icône */
+}
+
+.notification-item.expanded .notification-details {
+  max-height: 300px;
+  padding-top: 10px;
+}
+
+.notification-item.expanded .btn-toggle-details {
+  transform: rotate(180deg);
+}
+
+.notification-actions {
+  margin-top: 8px;
+  text-align: right;
+}
+
+.notification-empty {
+  padding: 15px;
+  text-align: center;
+  color: #6c757d;
+}

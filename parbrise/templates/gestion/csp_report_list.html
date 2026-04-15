@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head><title>Rapports CSP</title></head>
+<body>
+<h1>Violations CSP détectées</h1>
+<table border="1">
+<tr>
+    <th>Heure</th>
+    <th>Page</th>
+    <th>Directive</th>
+    <th>Contenu bloqué</th>
+    <th>Extrait</th>
+</tr>
+{% for r in reports %}
+<tr>
+    <td>{{ r.timestamp }}</td>
+    <td>{{ r.document_uri }}</td>
+    <td>{{ r.violated_directive }}</td>
+    <td>{{ r.blocked_uri }}</td>
+    <td>{{ r.script_sample|truncatechars:50 }}</td>
+</tr>
+{% empty %}
+<tr><td colspan="5">Aucune violation détectée.</td></tr>
+{% endfor %}
+</table>
+</body>
+</html>

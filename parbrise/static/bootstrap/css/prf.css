@@ -1,0 +1,370 @@
+:root {
+    --primary-color: #4a6fa5;
+    --secondary-color: #6b8cae;
+    --accent-color: #ff7e5f;
+    --light-color: #f8f9fc;
+    --dark-color: #2c3e50;
+    --success-color: #2ecc71;
+}
+
+.profile-container {
+    
+    max-width: 500px;
+    margin: 2rem auto;
+    margin-top: 60px;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.profile-container h2 {
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: #003366;
+    text-align: center;
+}
+
+.profile-container label {
+    font-weight: 500;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.profile-container .btn-primary {
+    background-color: #00a6d6;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    width: 100%;
+}
+
+.profile-container .btn-primary:hover {
+    background-color: #007ba7;
+}
+
+.profile-picture-container {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #00a6d6;
+}
+
+.default-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #00a6d6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #ddd;
+    margin: 0 auto;
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.picture-actions {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.custom-file-upload:hover {
+    background-color: #e9ecef;
+}
+
+#id_profile_picture {
+    display: none;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+/* Supprimer la marge gauche fixe */
+.profile-container {
+    margin-left: auto;
+}
+.sidebar-toggle-icon {
+    position: absolute;
+    top: 15px;
+    right: -15px;
+    background: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    cursor: pointer;
+    z-index: 101;
+    border: none;
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.sidebar-toggle-icon:hover {
+    background: var(--light-color);
+}
+
+.sidebar-toggle-icon i {
+    transition: transform 0.3s ease;
+}
+
+.sidebar.collapsed .sidebar-toggle-icon i {
+    transform: rotate(180deg);
+}
+
+/* Media Queries pour la responsivité */
+@media (max-width: 992px) {
+    .profile-container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+    
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .sidebar.active {
+        transform: translateX(0);
+    }
+    
+    .sg-content {
+        margin-left: 0;
+    }
+    
+    .sg-topbar {
+        left: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .profile-picture, .default-picture {
+        width: 100px;
+        height: 100px;
+        font-size: 2rem;
+    }
+    
+    .picture-actions {
+        flex-direction: column;
+    }
+    
+    .profile-container h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Styles pour le bouton de bascule du sidebar */
+.sidebar-toggle {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-right: 1rem;
+    cursor: pointer;
+}
+
+.notif-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    margin-left: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+
+
+.no-notifications {
+    background-color: #95a5a6;
+    visibility: hidden;
+}
+
+.sg-user-menu .dropdown-toggle {
+    border: none;
+    background: none;
+    color: #2c3e50;
+    font-weight: 500;
+    z-index: 9999;
+}
+
+.sg-user-menu .dropdown-toggle:after {
+    display: none;
+}
+.notif-badge{
+    justify-content: flex-end;
+}
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    min-width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 0;
+    z-index: 1000;
+    display: none;
+}
+.dropdown-item {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.85rem;
+    color: var(--dark-color);
+    white-space: normal;
+}
+.dropdown-item:hover {
+    background-color: var(--light-color);
+}
+/* Overlay */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999; /* En dessous de la sidebar mais au-dessus du reste */
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Correction du sélecteur */
+body.sidebar-open .sidebar-overlay {
+    display: block;
+    opacity: 1;
+}
+
+.sidebar-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.25rem;
+    cursor: pointer;
+    z-index: 1;
+}
+.notif-icon i,
+.sg-user-menu i {
+    color: var(--primary-color); /* bleu élégant */
+}
+
+.user-btn {
+    background: transparent;
+    border: none;
+    font-weight: 500;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-btn::after {
+    display: none; /* supprime la flèche Bootstrap */
+}
+
+.notif-badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: var(--danger-color); /* rouge */
+    color: white;
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+/* Icône notification */
+.notif-icon {
+    position: relative;
+    cursor: pointer;
+    font-size: 1.25rem;
+}
+
+.dropdown-menu {
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    border: none;
+    padding: 0.5rem 0;
+}
+.sg-topbar {
+    display: flex;
+    justify-content: flex-end; /* pousse tout à droite */
+    align-items: center;
+    gap: 1rem; /* espace entre icône et profil */
+    padding: 0 20px;
+    height: 60px;
+    position: fixed;
+    top: 0;
+    left: 250px; /* si sidebar fait 280px */
+    right: 0;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 9998;
+}
+.modal.fade.show{
+    z-index: 9999;
+}
+.notif-icon
+{
+     position: relative;
+    margin-right: 1.5rem;
+    cursor: pointer;display: flex;
+}
+/* Amélioration des entrées du menu */
+.dropdown-item {
+    font-size: 0.9rem;
+    color: #333;
+    transition: background 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: var(--light-color);
+}
+
+

@@ -1,0 +1,109 @@
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Historique des notifications</h6>
+            <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown">
+                    <i class="fas fa-filter"></i> Filtrer
+                </button>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item {% if request.GET.unread == 'true' %}active{% endif %}" 
+                       href="?unread=true">Non lues seulement</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item {% if request.GET.type == 'USER' %}active{% endif %}" 
+                       href="?type=USER">Utilisateurs</a>
+                    <a class="dropdown-item {% if request.GET.type == 'VERIFICATION' %}active{% endif %}" 
+                       href="?type=VERIFICATION">Vérifications</a>
+                    <a class="dropdown-item" href="{% url 'notification_history' %}">Réinitialiser</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="list-group">
+                {% for notif in notifications %}
+                <div class="list-group-item list-group-item-action {% if not notif.read %}list-group-item-light{% endif %}">
+                    <div class="d-flex w-100 justify-content-between">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3 text-{{ notif.get_alert_class }}">
+                                <i class="fas fa-{{ notif.get_icon_class }} fa-lg"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">{{ notif.get_short_message }}</h6>
+                                <small>{{ notif.timestamp }}</small>
+                                {% if notif.details %}
+                                <div class="mt-2">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button" 
+                                            data-bs-toggle="collapse" data-bs-target="#details-{{ notif.id }}">
+                                        Détails
+                                    </button>
+                                    <div class="collapse mt-2" id="details-{{ notif.id }}">
+                                        <div class="card card-body small">
+                                            {% for key, value in notif.get_formatted_details.items %}
+                                            <p class="mb-1"><strong>{{ key|title }}:</strong> {{ value }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if not notif.read %}
+                        <form method="post" action="{% url 'mark_notification_read' notif.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-primary" title="Marquer comme lu">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="list-group-item text-center text-muted py-4">
+                    <i class="fas fa-bell-slash fa-2x mb-2"></i>
+                    <p>Aucune notification trouvée</p>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if notifications.has_other_pages %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if notifications.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">&laquo; Première</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ notifications.previous_page_number }}">Précédent</a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in notifications.paginator.page_range %}
+                    {% if notifications.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% elif num > notifications.number|add:'-3' and num < notifications.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    
+                    {% if notifications.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ notifications.next_page_number }}">Suivant</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ notifications.paginator.num_pages }}">Dernière &raquo;</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

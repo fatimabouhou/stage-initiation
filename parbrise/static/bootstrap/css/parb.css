@@ -1,0 +1,321 @@
+:root {
+    --sg-blue: #005b9f;
+    --sg-blue-light: #0077c8;
+    --sg-gray: #f5f7fa;
+    --sg-dark: #2c3e50;
+    --sg-light: #ffffff;
+    --sg-border: #dfe6e9;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--sg-gray);
+    color: var(--sg-dark);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.container {
+    margin-top: 70px;
+    margin-left: 320px;
+    max-width: 800px;
+    
+    padding: 1.5rem;
+}
+
+/* Header simplifié */
+header {
+    background-color: var(--sg-blue);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    color: white;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+/* Boutons simplifiés */
+button, .btn {
+    border: none;
+    padding: 0.7rem 1.2rem;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    background-color: var(--sg-blue);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--sg-blue-light);
+}
+
+.btn-secondary {
+    background-color: #e0e0e0;
+    color: var(--sg-dark);
+}
+
+.btn-danger {
+    background-color: #d9534f;
+    color: white;
+}
+
+.btn-add {
+    background-color: var(--sg-blue);
+    color: white;
+}
+
+/* Section header */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+    color: var(--sg-blue);
+    font-size: 1.4rem;
+    margin: 0;
+}
+
+/* Table simplifiée */
+.table-responsive {
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--sg-border);
+}
+
+th {
+    background-color: var(--sg-blue);
+    color: white;
+    font-weight: 500;
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Images dans le tableau */
+.table-responsive img {
+    max-height: 50px;
+    max-width: 100px;
+    object-fit: contain;
+}
+
+/* Modals simplifiées */
+.modal {
+    display: none;
+    position: fixed;
+    
+    
+    width: 80%;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    margin-left: 250px;
+    margin-top: 50px;
+}
+/* Quand la modal est ouverte */
+body.modal-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
+.modal-content {
+    background: white;
+    margin: 50px auto; /* Centrage vertical */
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto; /* Scroll interne si contenu trop long */
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: var(--sg-blue);
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+.close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+}
+
+/* Formulaires */
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--sg-blue);
+}
+
+.form-group input[type="text"],
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 0.7rem;
+    border: 1px solid var(--sg-border);
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.form-group input:focus {
+    border-color: var(--sg-blue);
+    outline: none;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+}
+
+/* Modal de confirmation */
+.modal-content.confirm {
+    text-align: center;
+    padding: 2rem 1.5rem;
+}
+
+.modal-content.confirm p {
+    margin-bottom: 1.5rem;
+}
+
+.confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        margin-left: 0;
+        padding: 1rem;
+    }
+    .modal{
+        margin-left: 50px;
+        margin-top: 20px;
+    }
+    
+    header {
+        padding: 1rem;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .actions button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    th, td {
+        padding: 0.7rem;
+        font-size: 0.85rem;
+    }
+    
+    .modal-content {
+        padding: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .section-header h2 {
+        font-size: 1.2rem;
+    }
+    
+    .form-actions, .confirm-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions button, .confirm-actions button {
+        width: 100%;
+    }
+}
+
+/* Correction pour le body quand modal ouvert */
+body.modal-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+/* Style pour le flou d'arrière-plan */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 1040; /* Sous la modal mais au-dessus du contenu */
+    display: none;
+}
+
+/* Quand la modal est active */
+body.modal-active {
+    overflow: hidden;
+}
+
+/* Animation douce pour l'apparition */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-backdrop.show {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+}
